@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            飞书五子棋
+        </title>
+    </head>
+    <body>
+        <canvas id="canvas" width="400" height="400"></canvas>
+        <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+        <script type="text/javascript">
+            var blnBlack=true;
+             var drawLayout=function()
+            {
+                ctx.beginPath();
+                for(var i=0;i<19;i++){
+                    // for(j=1;j<=19;j++){
+                    
+                        ctx.moveTo(10+i*20,10);
+                        ctx.lineTo(10+i*20,370);
+                        ctx.moveTo(10,10+i*20);
+                        ctx.lineTo(370,10+i*20);
+
+                    // }
+                }
+                ctx.stroke();
+            };
+            var checkCross=function(x,y){
+                x=(x-10)/20;
+                y=(y-10)/20;
+                console.log(Math.round(x)*20   )
+                return[Math.round(x)*20+10 ,Math.round(y)*20+10 ]
+            };
+            $("#canvas").click(function(event)
+            {
+                console.log(event.offsetX);
+             
+                posX= checkCross(event.offsetX,event.offsetY)[0];
+                posY= checkCross(event.offsetX,event.offsetY)[1];
+              
+                ctx.beginPath();
+                if(blnBlack){
+                    ctx.fillStyle="Blue"
+                    ctx.arc(posX,posY,10,0,Math.PI*2,false);
+                     ctx.fill();
+                }
+                else{
+                    ctx.fillStyle="Yellow"
+                    ctx.arc(posX,posY,10,0,Math.PI*2,false);
+                    ctx.fill();
+                ctx.stroke();
+                }
+                
+                blnBlack=!blnBlack;
+            });
+          
+            var cans=document.getElementById("canvas");
+           
+            var ctx=cans.getContext("2d");
+            drawLayout(ctx);
+       
+           
+        </script>
+    </body>
+</html>
