@@ -10,6 +10,15 @@
         <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
         <script type="text/javascript">
             var blnBlack=true;
+            var aryStaus = new Array(); //先声明一维
+            for(var k=0;k<19;k++)
+            { 
+                aryStaus[k]=new Array(); //声明二维，每一个一维数组里面的一个元素都是一个数组；
+                for(var j=0;j<19;j++)
+                { 
+                    aryStaus[k][j]=0; //将变量初始化
+                }
+            }
              var drawLayout=function()
             {
                 ctx.beginPath();
@@ -31,27 +40,86 @@
                 console.log(Math.round(x)*20   )
                 return[Math.round(x)*20+10 ,Math.round(y)*20+10 ]
             };
+            var checkResult=function(x,y)//检查是否胜利
+            {
+                if(blnBlack){
+                    intVal=1;//黑色值为1
+                }else{
+                    intVal=2;//白色为2
+                }
+              if(aryStaus[x].toString().indexOf("1,1,1,1,1")>=0) 
+                console.log("win");
+            if(aryStaus[y].toString().indexOf("1,1,1,1,1")>=0) 
+                console.log("win");  
+              var intStartNo=0;
+              var intEndNo=0;
+              if(x-4<=0){
+                intStartNo=0;   
+              }
+              else{
+                  intStartNo=x-4
+              }  
+              if(x+4>=18){
+                intEndNo=18;
+              }    
+              else{
+                intEndNo=x+4
+              }
+              intCount=0;
+              for(i=intStartNo;i<=intEndNo;i++){
+                  if(aryStaus[i][y]==intVal){
+                    intCount++;
+                    if(intCount>=5){
+                        alert(blnBlack+"胜利");
+                    }
+                  }
+                  else{
+                      intCount=0;
+                  }
+              }
+              
+            };
+           
+            var recordStaus=function(x,y){//记录状态
+                var intVal=0;
+              if(blnBlack){
+                intVal=1;
+              }   
+              else{
+                intVal=2;
+              }   
+              aryStaus[x][y]=intVal;
+            }
             $("#canvas").click(function(event)
             {
                 console.log(event.offsetX);
              
                 posX= checkCross(event.offsetX,event.offsetY)[0];
                 posY= checkCross(event.offsetX,event.offsetY)[1];
-              
-                ctx.beginPath();
-                if(blnBlack){
-                    ctx.fillStyle="Blue"
-                    ctx.arc(posX,posY,10,0,Math.PI*2,false);
-                     ctx.fill();
+                intGridX=(posX-10)/20;
+                intGridY=(posY-10)/20;
+               
+                if( aryStaus[intGridX][intGridY]==0){//如位置重复则跳过，否则可以放置棋子
+                    ctx.beginPath();
+                    if(blnBlack){
+                        ctx.fillStyle="Blue"
+                        ctx.arc(posX,posY,10,0,Math.PI*2,false);
+                        ctx.fill();
+                    }
+                    else{
+                        ctx.fillStyle="Yellow"
+                        ctx.arc(posX,posY,10,0,Math.PI*2,false);
+                        ctx.fill();
+                    ctx.stroke();
+                    }
+                    
+                    recordStaus(intGridX,intGridY);       
+                     checkResult(intGridX,intGridY);//校验是否有胜利方
+                    
+                     blnBlack=!blnBlack;            
                 }
-                else{
-                    ctx.fillStyle="Yellow"
-                    ctx.arc(posX,posY,10,0,Math.PI*2,false);
-                    ctx.fill();
-                ctx.stroke();
-                }
-                
-                blnBlack=!blnBlack;
+               
+               
             });
           
             var cans=document.getElementById("canvas");
